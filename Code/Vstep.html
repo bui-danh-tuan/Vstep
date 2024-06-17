@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thi Vstep - Code by Tuấn</title>
+    <link rel="stylesheet" href="E:\Tiếng anh\Vstep\Code\styles.css">
+    <script src="E:\Tiếng anh\Vstep\Code\script.js"></script>
+    <script src="https://neil.fraser.name/software/diff_match_patch/javascript/diff_match_patch.js"></script>
+</head>
+
+<body>
+    <h1>Thi Vstep - Code by Tuấn</h1>
+    <div class="selection-container">
+    </div>
+    <div class="content">
+        <div style="width: 20%; height: 100%; padding: 20px; text-align: center;">
+            <div id="uptime" style="text-align: center; font-size: 50px; font-weight: bold;">Loading...</div>
+            <label for="sheetSelect"
+                style="font-size: 13px; border: 1px solid gray; padding: 3px 0 3px 2px; border-radius: 4px; margin: 0px;">
+                Study the lesson <select id="sheetSelect"></select></label>
+            <div style="margin-top: 10px;">
+                <label for="fromQuestion"
+                    style="font-size: 13px; border: 1px solid gray; padding: 3px 0 3px 2px; border-radius: 4px; margin: 0px;">
+                    From <input type="number" id="fromQuestion" style="width: 50px;"></label>
+                <label for="toQuestion"
+                    style="font-size: 13px; border: 1px solid gray; padding: 3px 0 3px 2px; border-radius: 4px; margin: 0px;">
+                    To <input type="number" id="toQuestion" style="width: 50px;"></label>
+            </div>
+            <div style="margin-top: 10px;">
+                <label for="levelQuestion"
+                    style="font-size: 13px; border: 1px solid gray; padding: 3px 0 3px 2px; border-radius: 4px; margin: 0px;">
+                    Level <input type="number" id="levelQuestion" style="width: 50px;"></label>
+            </div>
+            <div class="radio-group">
+                <div class="radio-option" onclick="selectOptionLearn(this)" value="lrn">Learn</div>
+                <div class="radio-option" onclick="selectOptionLearn(this)" value="e_v">English - Vietnamese</div>
+                <div class="radio-option" onclick="selectOptionLearn(this)" value="v_e">Vietnamese - English</div>
+                <div class="radio-option" onclick="selectOptionLearn(this)" value="fit">Fill in the blanks</div>
+            </div>
+            <div id="overallResult" class="overallResult">
+            </div>
+        </div>
+        <div style="width: 80%; height: 100%;">
+            <div class="study_area">
+                <div class="content">
+                    <div class="normalCol">
+                        <div class="normalCell scrollable">
+                            <div id="layoutQuestion" style="height: 100%;">
+                            </div>
+                        </div>
+                        <div class="normalCell scrollable">
+                            <div id="layoutAnswer" style="height: 100%;">
+                                <div class="result-container" id="result1"></div>
+                                <div class="result-container" id="result2"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="normalCol">
+                        <div id="layoutLearn" class="normalCell">
+                            <textarea id="text2" placeholder="Enter text 2"></textarea>
+                        </div>
+                        <div id="layoutAction" class="normalCell">
+                            <div>
+                                <button class="normalButton" onclick="correctQuestion()">Correct</button>
+                                <button class="normalButton" onclick="compareTexts()">Compare</button>
+                                <button class="normalButton" onclick="wrongQuestion()">Wrong</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

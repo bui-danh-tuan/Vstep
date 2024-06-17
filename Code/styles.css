@@ -1,0 +1,220 @@
+body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    box-sizing: border-box;
+    font-family: Caribi, sans-serif;
+}
+
+h1 {
+    width: 100%;
+    text-align: center;
+    margin: 0px;
+}
+
+.selection-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+}
+
+.selection-group {
+    display: flex;
+    align-items: center;
+}
+
+label,
+select,
+button {
+    margin: 5px;
+}
+
+label {
+    font-weight: bold;
+    margin-right: 10px;
+}
+
+select {
+    margin-left: 0;
+}
+
+.labelSheetSelect {
+    border: 1px solid black;
+    border-radius: 5px;
+    padding-left: 5px;
+    font-weight: normal;
+    font-size: 13px;
+}
+
+.buttonLoadData {
+    border: 1px solid black;
+    border-radius: 5px;
+    height: 29px;
+    font-size: 13px;
+}
+
+.content {
+    height: calc(100vh - 126px);
+    width: 100%;
+    display: flex;
+}
+
+
+.radio-group {
+    display: flex;
+    flex-direction: column;
+    border: 1px solid #ccc;
+    border-top: none;
+    border-radius: 5px;
+    margin-top: 40px;
+}
+
+.radio-option {
+    padding: 5px;
+    border-top: 1px solid #ccc;
+    cursor: pointer;
+    font-size: 15px;
+    border-radius: 5px;
+}
+
+.radio-option.selected {
+    background-color: #a1c4fd;
+    /* Màu tô khi được chọn */
+    color: #fff;
+}
+
+.study_area {
+    font-size: medium;
+}
+
+.text-normal {
+    font-size: 13px;
+    margin: 0;
+    padding: 10px;
+}
+
+.content-normal {
+    margin: 0px;
+}
+
+/* 
+.textarea-container {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
+textarea {
+    width: 48%;
+    height: 200px;
+}
+
+.result-container {
+    white-space: pre-wrap;
+}
+
+.highlight {
+    background-color: yellow;
+} */
+
+.normalCol {
+    width: 50%;
+    height: 100%;
+}
+
+.normalCell {
+    width: 90%;
+    margin: 5%;
+    height: 45%;
+    border: 1px solid black;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0px;
+    text-align: left;
+    padding: 10px;
+}
+
+#text2 {
+    width: 95%;
+    height: 95%;
+    border: none;
+    padding: 0;
+}
+
+textarea:focus {
+    outline: none;
+}
+
+/* Phần so sánh */
+.textarea-container {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
+textarea {
+    width: 48%;
+    height: 200px;
+}
+
+.result-container {
+    white-space: pre-wrap;
+    margin-bottom: 10px;
+    font-size: 13px;
+}
+
+.highlight {
+    background-color: yellow;
+}
+
+.removed {
+    background-color: lightcoral;
+    text-decoration: line-through;
+}
+
+.added {
+    background-color: lightgreen;
+}
+
+.diff {
+    display: flex;
+    justify-content: space-between;
+}
+
+.diff div {
+    width: 48%;
+}
+
+.normalButton {
+    width: 80px;
+}
+
+.overallResult {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    border: 1px solid black;
+    margin-top: 10px;
+}
+
+.overallResult p:nth-child(odd) {
+    grid-column: 1;
+}
+
+.overallResult p:nth-child(even) {
+    grid-column: 2;
+}
+
+.overallResult p {
+    padding: 10px;
+    margin: 0px;
+    border: 1px solid #ccc;
+}
+
+.scrollable {
+    overflow: auto;
+}
