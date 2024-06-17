@@ -43,7 +43,7 @@ function selectOptionLearn(element) {
     options.forEach(option => option.classList.remove('selected'));
     element.classList.add('selected');
 
-    nextQuestion();
+    nextQuestion(false);
 }
 
 async function fetchUptime() {
@@ -74,11 +74,13 @@ async function updateUptime() {
     }, 1000);
 }
 
-function nextQuestion() {
+function nextQuestion(next=true) {
     countData();
     document.getElementById("result1").innerHTML = '';
     document.getElementById("result2").innerHTML = '';
-    tempGenData = getRandomItemByWeight(genData);
+    if (next || !tempGenData) {
+        tempGenData = getRandomItemByWeight(genData);
+    }
     if (!tempGenData){
         document.getElementById("layoutQuestion").innerHTML = `
             <div class="content-normal">
