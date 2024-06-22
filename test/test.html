@@ -1,116 +1,69 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<style>
-/* Center the loader */
-#loader {
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  z-index: 2;
-  width: 120px;
-  height: 120px;
-  margin: -60px 0 0 -60px;
-  border: 16px solid #f3f3f3;
-  border-radius: 50%;
-  border-top: 16px solid #3498db;
-  -webkit-animation: spin 2s linear infinite;
-  animation: spin 2s linear infinite;
-  display: none;
-}
-
-#loader-text {
-  position: absolute;
-  left: 50%;
-  top: calc(50% + 80px);
-  transform: translateX(-50%);
-  z-index: 2;
-  font-size: 24px;
-  color: #3498db;
-  display: none;
-}
-
-@-webkit-keyframes spin {
-  0% { -webkit-transform: rotate(0deg); }
-  100% { -webkit-transform: rotate(360deg); }
-}
-
-@keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
-}
-
-/* Overlay */
-#overlay {
-  position: fixed; 
-  display: none;
-  width: 100%;
-  height: 100%;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: rgba(0,0,0,0.5); 
-  z-index: 1; 
-  cursor: not-allowed;
-}
-
-/* Add animation to "page content" */
-.animate-bottom {
-  position: relative;
-  -webkit-animation-name: animatebottom;
-  -webkit-animation-duration: 1s;
-  animation-name: animatebottom;
-  animation-duration: 1s
-}
-
-@-webkit-keyframes animatebottom {
-  from { bottom:-100px; opacity:0 } 
-  to { bottom:0px; opacity:1 }
-}
-
-@keyframes animatebottom { 
-  from{ bottom:-100px; opacity:0 } 
-  to{ bottom:0; opacity:1 }
-}
-
-#myDiv {
-  display: none;
-  text-align: center;
-}
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Textarea with Line Numbers</title>
+    <style>
+        .container {
+            display: flex;
+            position: relative;
+        }
+        .line-numbers {
+            counter-reset: linenumber;
+            text-align: right;
+            padding-right: 10px;
+            background-color: #f0f0f0;
+            border-right: 1px solid #ccc;
+        }
+        .line-numbers div {
+            counter-increment: linenumber;
+            padding: 0 10px;
+            line-height: 20px;
+        }
+        .line-numbers div::before {
+            content: counter(linenumber);
+            display: inline-block;
+            width: 20px;
+            margin-right: 10px;
+        }
+        textarea {
+            flex-grow: 1;
+            border: none;
+            padding: 10px;
+            line-height: 20px;
+            resize: none;
+            overflow: hidden;
+        }
+    </style>
 </head>
-<body style="margin:0;">
+<body>
+    <div class="container">
+        <div class="line-numbers"></div>
+        <textarea id="editor" rows="10" cols="50" oninput="updateLineNumbers()" onscroll="syncScroll()"></textarea>
+    </div>
+    <script>
+        function updateLineNumbers() {
+            const editor = document.getElementById('editor');
+            const lines = editor.value.split('\n').length;
+            const lineNumbers = document.querySelector('.line-numbers');
+            
+            lineNumbers.innerHTML = '';
+            for (let i = 0; i < lines; i++) {
+                const div = document.createElement('div');
+                lineNumbers.appendChild(div);
+            }
+        }
 
-<button onclick="startLoading()">Start Loading</button>
+        function syncScroll() {
+            const editor = document.getElementById('editor');
+            const lineNumbers = document.querySelector('.line-numbers');
+            lineNumbers.scrollTop = editor.scrollTop;
+        }
 
-<div id="overlay"></div>
-<div id="loader"></div>
-<div id="loader-text">A</div>
-
-<div style="display:block;" id="myDiv" class="animate-bottom">
-  <h2>Tada!</h2>
-  <p>Some text in my newly loaded page..</p>
-</div>
-
-<script>
-var myVar;
-
-function startLoading() {
-  document.getElementById("overlay").style.display = "block";
-  document.getElementById("loader").style.display = "block";
-  document.getElementById("loader-text").style.display = "block";
-  myVar = setTimeout(showPage, 3000);
-}
-
-function showPage() {
-  document.getElementById("overlay").style.display = "none";
-  document.getElementById("loader").style.display = "none";
-  document.getElementById("loader-text").style.display = "none";
-  document.getElementById("myDiv").style.display = "block";
-}
-</script>
-
+        document.addEventListener('DOMContentLoaded', () => {
+            updateLineNumbers();
+        });
+    </script>
 </body>
 </html>

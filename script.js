@@ -74,14 +74,15 @@ async function updateUptime() {
     }, 1000);
 }
 
-function nextQuestion(next=true) {
+function nextQuestion(next = true) {
     countData();
     document.getElementById("result1").innerHTML = '';
     document.getElementById("result2").innerHTML = '';
+    document.getElementById('text2').value = null;
     if (next || !tempGenData) {
         tempGenData = getRandomItemByWeight(genData);
     }
-    if (!tempGenData){
+    if (!tempGenData) {
         document.getElementById("layoutQuestion").innerHTML = `
             <div class="content-normal">
                 <p class="text-normal">Đã học thuộc hết câu hỏi.</p>
@@ -93,12 +94,12 @@ function nextQuestion(next=true) {
     var codeType = tempGenData['type'];
     var numberData = tempGenData['number'];
     var setenceData = tempGenData['setence'];
-    setenceData = setenceData.replaceAll('\n', '</br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;');
+    setenceData = setenceData.replaceAll('\n', '</br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ');
     var meanData = tempGenData['mean'];
     var part = settingData.find(item => item.col === 'part' && item.code === codePart && item.sheet === sheetSelectValue)['mean'];
-    var type = settingData.find(item => item.col === 'type' && item.code === codeType)['mean'];
+    var type = settingData.find(item => item.col === 'type' && item.code === codeType && item.sheet === sheetSelectValue)['mean'];
 
-    if (learnType != "fit"){
+    if (learnType != "fit") {
         document.getElementById("layoutQuestion").innerHTML = `
             <div class="content-normal">
                 <p class="text-normal">${numberData}) ${type}: ${part}</p>
@@ -113,8 +114,8 @@ function nextQuestion(next=true) {
         document.getElementById("layoutQuestion").innerHTML = `
             <div class="content-normal">
                 <p class="text-normal">${numberData}) ${type}: ${part}</p>
-                <p class="text-normal" id="text1" style="display: none;">${setenceData}</p>
-                <p class="text-normal" id="textFill">${tempChar}</p>
+                <p class="text-normal" id="text1" style="display: none;">${tempChar[0]}</p>
+                <p class="text-normal" id="textFill">${tempChar[1]}</p>
                 <p class="text-normal">${meanData}</p>
             </div>
         `;
@@ -124,17 +125,18 @@ function nextQuestion(next=true) {
 function compareTexts() {
     const text1 = document.getElementById('text1').innerHTML;
     var text2 = document.getElementById('text2').value;
-    if (learnType == 'fit'){
+    if (learnType == 'fit') {
         var textFill = document.getElementById("textFill").innerHTML;
         var tempTextFill = textFill.split(" ");
         var tempText2 = text2.split("\n");
-        if (tempText2.length != textFill.split("________").length-1){
-            alert("Số chữ nhập vào không đúng!")
-        } else{
+        if (tempText2.length != textFill.split(/__.*?__/).length - 1) {
+            alert("Số chữ nhập vào không đúng!");
+            return false;
+        } else {
             var count = 0;
-            for (let i=0; i<tempTextFill.length; i++){
-                if (tempTextFill[i] == "________"){
-                    tempTextFill[i] = tempText2[count];
+            for (let i = 0; i < tempTextFill.length; i++) {
+                if (/__.*?__/.test(tempTextFill[i])) {
+                    tempTextFill[i] = "__"+tempText2[count]+"__";
                     count += 1;
                 }
             }
@@ -175,27 +177,38 @@ function replaceRandomChars(inputString, n) {
     }
 
     // Chuyển chuỗi thành mảng để dễ thay đổi
-    let charArray = inputString.split(' ');
+    let charArray2 = inputString.split(' ');
+    let charArray1 = inputString.split(' ');
 
     // Chọn ngẫu nhiên n vị trí trong chuỗi
     let randomIndices = [];
     while (randomIndices.length < n) {
-        let randIndex = Math.floor(Math.random() * charArray.length);
+        let randIndex = Math.floor(Math.random() * charArray2.length);
         if (!randomIndices.includes(randIndex)) {
             randomIndices.push(randIndex);
         }
     }
+    randomIndices = randomIndices.sort((a, b) => a - b);
 
     // Thay thế các ký tự tại các vị trí đã chọn bằng ký tự '_'
+    var tempCount = 1;
     randomIndices.forEach(index => {
-        charArray[index] = '________';
+        charArray1[index] = '__'+charArray1[index]+'__'+ 
+            (charArray1[index].includes(".") ? "." : "" ) + 
+            (charArray1[index].includes(",") ? "," : "") +
+            (charArray1[index].includes("</br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;") ? "</br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" : "" );
+        charArray2[index] = '__'+tempCount+'__'+ 
+            (charArray2[index].includes(".") ? "." : "" ) + 
+            (charArray2[index].includes(",") ? "," : "") +
+            (charArray2[index].includes("</br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;") ? "</br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" : "" );
+        tempCount++;
     });
 
     // Chuyển mảng trở lại thành chuỗi
-    return charArray.join(' ');
+    return [charArray1.join(' '), charArray2.join(' ')];
 }
 function correctQuestion() {
-    if(!tempGenData) return;
+    if (!tempGenData) return;
     tempGenData['weight'] -= 1;
     updateWeight(document.getElementById('sheetSelect').value,
         tempGenData['number'],
@@ -203,7 +216,7 @@ function correctQuestion() {
     nextQuestion();
 }
 function wrongQuestion() {
-    if(!tempGenData) return;
+    if (!tempGenData) return;
     tempGenData['weight'] += 1;
     updateWeight(document.getElementById('sheetSelect').value,
         tempGenData['number'],
@@ -250,7 +263,7 @@ async function updateWeight(sheetName, number, weight) {
     }
 }
 
-function countData(){
+function countData() {
     const weightCount = {};
     genData.forEach(obj => {
         const weight = obj.weight;
@@ -271,3 +284,21 @@ function countData(){
     }
 }
 window.onload = updateUptime;
+document.addEventListener('keydown', function (event) {
+    const result1 = document.getElementById('result1');
+    const result2 = document.getElementById('result2');
+    const text2 = document.getElementById('text2');
+    if (event.key === 'Enter') {
+        document.getElementById("countLineText2").value = text2.value.split("\n").length+1;
+    }
+    if (event.key === 'Enter' && event.ctrlKey) {
+        if (result1.innerHTML == '') {
+            compareTexts();
+        }
+        else {
+            if (result1.innerHTML == result2.innerHTML) correctQuestion();
+            else wrongQuestion();
+            text2.value  = '';
+        }
+    }
+});
